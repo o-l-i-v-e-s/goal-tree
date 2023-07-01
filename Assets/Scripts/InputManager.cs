@@ -4,35 +4,36 @@ using UnityEngine;
 
 public class InputManager : MonoBehaviour
 {
-
-
-    [SerializeField] private Camera cam;
+    [SerializeField] private GameObject container;
+    private Camera cam;
     [SerializeField] private Transform target;
 
     private float distanceToTarget = 10;
-    private float cameraHeight;
+    private float containerHeight;
     private Vector3 previousPosition;
 
     private void Start()
     {
-        if(cam != null)
+        if(container != null)
         {
+            cam = container.GetComponentInChildren<Camera>();
+            Debug.Log(cam);
             if (target != null)
             {
-                cameraHeight = cam.transform.position.y;
-                Debug.Log("cam position: " + cam.transform.position);
+                containerHeight = container.transform.position.y;
+                Debug.Log("container position: " + container.transform.position);
                 Debug.Log("target position: " + target.transform.position);
-                distanceToTarget = Vector3.Distance(new Vector3(target.transform.position.x, 0, target.transform.position.z), new Vector3(cam.transform.position.x, 0, cam.transform.position.z));
+                distanceToTarget = Vector3.Distance(new Vector3(target.transform.position.x, 0, target.transform.position.z), new Vector3(container.transform.position.x, 0, container.transform.position.z));
                 Debug.Log("DISTANCE TO TARGET: " + distanceToTarget);
             }
             else
             {
-                Debug.LogError("Target (around which the camera will rotate) is null on InputManager");
+                Debug.LogError("Target (around which the camera container will rotate) is null on InputManager");
             }
 
         } else
         {
-            Debug.LogError("cam is null on InputManager");
+            Debug.LogError("container is null on InputManager");
         }
     }
 
@@ -49,11 +50,11 @@ public class InputManager : MonoBehaviour
 
             float rotationAroundYAxis = -direction.x * 180;
 
-            cam.transform.position = new Vector3(target.position.x, cameraHeight, target.position.z);
+            container.transform.position = new Vector3(target.position.x, containerHeight, target.position.z);
 
-            cam.transform.Rotate(new Vector3(0, 1, 0), rotationAroundYAxis, Space.World);
+            container.transform.Rotate(new Vector3(0, 1, 0), rotationAroundYAxis, Space.World);
 
-            cam.transform.Translate(new Vector3(0, 0, -distanceToTarget));
+            container.transform.Translate(new Vector3(0, 0, -distanceToTarget));
 
             previousPosition = newPosition;
         }
