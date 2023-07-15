@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class UiManager : MonoBehaviour
@@ -29,7 +27,6 @@ public class UiManager : MonoBehaviour
 
     public void StartHover()
     {
-        Debug.Log("HOVERING");
         Cursor.SetCursor(CursorPointer, new Vector2(175, 0), CursorMode.Auto);
     }
 
