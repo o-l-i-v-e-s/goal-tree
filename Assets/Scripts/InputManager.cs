@@ -23,10 +23,7 @@ public class InputManager : MonoBehaviour
             if (target != null)
             {
                 containerHeight = container.transform.position.y;
-                Debug.Log("container position: " + container.transform.position);
-                Debug.Log("target position: " + target.transform.position);
                 distanceToTarget = Vector3.Distance(new Vector3(target.transform.position.x, 0, target.transform.position.z), new Vector3(container.transform.position.x, 0, container.transform.position.z));
-                Debug.Log("DISTANCE TO TARGET: " + distanceToTarget);
             }
             else
             {
@@ -49,15 +46,10 @@ public class InputManager : MonoBehaviour
         {
             Vector3 newPosition = cam.ScreenToViewportPoint(Input.mousePosition);
             Vector3 direction = previousPosition - newPosition;
-
             float rotationAroundYAxis = -direction.x * 180;
-
             container.transform.position = new Vector3(target.position.x, containerHeight, target.position.z);
-
             container.transform.Rotate(new Vector3(0, 1, 0), rotationAroundYAxis, Space.World);
-
             container.transform.Translate(new Vector3(0, 0, -distanceToTarget));
-
             previousPosition = newPosition;
         }
     }
@@ -80,7 +72,6 @@ public class InputManager : MonoBehaviour
             if (clickedGameObject != null && clickedGameObject.CompareTag("Leaf"))
             {
                 Leaf leaf = clickedGameObject.GetComponent<Leaf>();
-                Debug.Log(leaf);
                 leaf.HandleClick();
             }
         }

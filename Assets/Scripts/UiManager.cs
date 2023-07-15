@@ -4,6 +4,7 @@ public class UiManager : MonoBehaviour
 {
     [SerializeField] Texture2D CursorPointer;
     [SerializeField] GameObject LeafModal;
+    GameObject SelectedLeaf;
 
     void Start()
     {
@@ -13,15 +14,30 @@ public class UiManager : MonoBehaviour
         }
     }
 
-    public void OpenLeafModal()
+    public void OpenLeafModal(GameObject Leaf)
     {
         Debug.Log("OpenLeafModal");
         LeafModal.SetActive(true);
+        SelectedLeaf = Leaf;
+    }
+
+    public void ConfirmCompleteLeaf()
+    {
+        if(SelectedLeaf == null)
+        {
+            Debug.LogError("SelectedLeaf is null when completing Leaf on UiManager");
+        } else
+        {
+            Leaf leaf = SelectedLeaf.GetComponent<Leaf>();
+            leaf.HandleCompleteLeaf();
+            CloseAllModals();
+        }
     }
 
     public void CloseAllModals()
     {
         LeafModal.SetActive(false);
+        SelectedLeaf = null;
         EndHover();
     }
 
