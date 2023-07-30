@@ -7,6 +7,7 @@ public class Leaf : MonoBehaviour
     [SerializeField] Material leafMaterial;
     GameObject gameManager;
     UiManager uiManager;
+    SaveManager saveManager;
     Material originalMaterial;
     MeshRenderer meshRenderer;
     string completedOn = "";
@@ -37,6 +38,11 @@ public class Leaf : MonoBehaviour
             if(uiManager == null)
             {
                 Debug.LogError("uiManager is null");
+            }
+            saveManager = gameManager.GetComponentInChildren<SaveManager>();
+            if (saveManager == null)
+            {
+                Debug.LogError("saveManager is null");
             }
         } else
         {
@@ -72,6 +78,7 @@ public class Leaf : MonoBehaviour
         else
         {
             // If the leaf has never been clicked, show a confirmation modal (Are you sure you want to mark this leaf as completed?)
+            saveManager.LoadData();
             uiManager.OpenLeafModal(gameObject);
         }
     }
@@ -80,6 +87,7 @@ public class Leaf : MonoBehaviour
     {
         completedOn = Time.time.ToString();
         UpdateToRandomColor();
+        saveManager.SaveData();
     }
 
     private void UpdateToRandomColor()

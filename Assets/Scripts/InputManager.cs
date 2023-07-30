@@ -13,6 +13,7 @@ public class InputManager : MonoBehaviour
     private float containerHeight;
     private Vector3 previousPosition;
     private GameObject clickedGameObject;
+    private bool clickedOnGameObject = false;
 
     private void Start()
     {
@@ -54,10 +55,20 @@ public class InputManager : MonoBehaviour
         }
     }
 
+    private bool IsPointerOverUIObject()
+    {
+        PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
+        eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
+        return results.Count > 0;
+    }
+
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
+        if (Input.GetMouseButtonDown(0) && !IsPointerOverUIObject())
         {
+            clickedOnGameObject = true;
             // save previousPosition for use in rotating screen
             previousPosition = cam.ScreenToViewportPoint(Input.mousePosition);
             RaycastHit raycastHit;
@@ -75,7 +86,7 @@ public class InputManager : MonoBehaviour
                 leaf.HandleClick();
             }
         }
-        else if (Input.GetMouseButton(0) && !EventSystem.current.IsPointerOverGameObject())
+        else if (clickedOnGameObject && Input.GetMouseButton(0))
         {
             // when clicking anywhere but the leaf
             if (clickedGameObject == null || !clickedGameObject.CompareTag("Leaf"))
@@ -87,6 +98,7 @@ public class InputManager : MonoBehaviour
         {
             // clear out the clicked game object
             clickedGameObject = null;
+            clickedOnGameObject = false;
         }
     }
 }
